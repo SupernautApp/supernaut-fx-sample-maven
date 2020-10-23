@@ -1,10 +1,17 @@
-import javafx.application.Application;
+package app.supernaut.fx.sample.maven;
+
+import app.supernaut.BackgroundApp;
+import app.supernaut.fx.FxForegroundApp;
+import app.supernaut.fx.FxLauncher;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-public class HelloFX extends Application {
+import javax.inject.Singleton;
+
+@Singleton
+public class HelloFX implements FxForegroundApp.FxApplicationCompat  {
 
     @Override
     public void start(Stage stage) {
@@ -16,8 +23,19 @@ public class HelloFX extends Application {
         stage.show();
     }
 
+    /**
+     * Background application that runs without UI (JavaFX)
+     */
+    @Singleton
+    static class MinimalBackgroundApp implements BackgroundApp {
+        @Override
+        public void start() {
+        }
+    }
+
+
     public static void main(String[] args) {
-        launch();
+        FxLauncher.byName("micronaut").launch(args, HelloFX.class, MinimalBackgroundApp.class);
     }
 
 }
