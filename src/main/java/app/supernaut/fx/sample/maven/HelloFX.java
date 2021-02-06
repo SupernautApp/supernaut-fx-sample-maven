@@ -1,41 +1,46 @@
 package app.supernaut.fx.sample.maven;
 
-import app.supernaut.BackgroundApp;
 import app.supernaut.fx.FxForegroundApp;
 import app.supernaut.fx.FxLauncher;
+import app.supernaut.services.BrowserService;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.inject.Singleton;
+import java.net.URI;
 
 @Singleton
-public class HelloFX implements FxForegroundApp.FxApplicationCompat  {
+public class HelloFX implements FxForegroundApp.FxApplicationCompat {
+    private static final URI githubRepoUri = URI.create("https://github.com/SupernautApp/SupernautFX");
+    private final BrowserService browserService;
+
+    public HelloFX(BrowserService browserService) {
+        this.browserService = browserService;
+    }
 
     @Override
     public void start(Stage stage) {
-        String javaVersion = System.getProperty("java.version");
-        String javafxVersion = System.getProperty("javafx.version");
-        Label l = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        Scene scene = new Scene(new StackPane(l), 640, 480);
-        stage.setScene(scene);
+        stage.setScene(buildScene());
+        stage.setTitle("Supernaut.FX: Hello");
         stage.show();
     }
 
-    /**
-     * Background application that runs without UI (JavaFX)
-     */
-    @Singleton
-    static class MinimalBackgroundApp implements BackgroundApp {
-        @Override
-        public void start() {
-        }
+    private Scene buildScene() {
+        var javaVersion = System.getProperty("java.version");
+        var javafxVersion = System.getProperty("javafx.version");
+        var label       = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
+        //var hyperlink   = new Hyperlink("Powered by Supernaut.FX");  // Doesn't work in Graal native-image yet
+        var vbox        = new VBox(label /*, hyperlink */);
+        vbox.setAlignment(Pos.CENTER);
+        //hyperlink.setOnAction(e -> browserService.showDocument(githubRepoUri));
+        return new Scene(vbox, 350, 100);
     }
-
 
     public static void main(String[] args) {
-        FxLauncher.byName("micronaut").launch(args, HelloFX.class, MinimalBackgroundApp.class);
+        FxLauncher.byName("micronaut").launch(args, HelloFX.class);
     }
-
 }
