@@ -13,7 +13,7 @@
     <maven.compiler.release>11</maven.compiler.release>
     <javafx.version>16-ea+6</javafx.version>
     <micronaut.version>2.3.1</micronaut.version>
-    <supernaut.version>0.1.1-SNAPSHOT</supernaut.version>
+    <supernaut.version>0.1.1</supernaut.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.maven.plugin.version>0.0.5</javafx.maven.plugin.version>
     <client.maven.plugin.version>0.1.36</client.maven.plugin.version>
