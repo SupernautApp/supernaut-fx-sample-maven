@@ -1,11 +1,13 @@
 = Supernaut.FX Sample Maven Project
 
+This sample project contains a few @Singleton-objects to demonstrate how you can separate for example a few data objects and your visual components.
+
 == Setup
 
-. Install JDK 11 or later. (JDK 15 or 16 is recommended)
-. Install Maven. (Maven 3.6 or later is recommended)
-
-NOTE:: Until Supernaut.FX v0.1.1 is released, you'll have to build Supernaut locally and install into your local Maven Repo.
+. Install JDK 11 or later.
+(JDK 15 or 16 is recommended)
+. Install Maven.
+(Maven 3.6 or later is recommended)
 
 == Build Instructions
 
@@ -17,12 +19,13 @@ or, to run the app:
 
 . `mvn javafx:run`
 
-
 == Graal VM Setup
 
 . Install Graal VM 21.0.0.r11 (Latest GraalVM JDK 11)
-. `gu install native-image`
-. Set `GRAALVM_HOME` environment variable
+. `gu install native-image` or `sdk use java 21.0.0.r11-grl`
+. Set `GRAALVM_HOME` environment variable, e.g. on Mac:
+
+`export GRAALVM_HOME="$HOME/.sdkman/candidates/java/21.0.0.r11-grl"`
 
 == Graal VM Native Image
 

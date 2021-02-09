@@ -17,6 +17,7 @@ module hellofx {
 
     opens app.supernaut.fx.sample.maven to javafx.graphics, java.base;
     exports app.supernaut.fx.sample.maven;
+    exports app.supernaut.fx.sample.maven.demo;
 
     uses app.supernaut.fx.FxLauncher;
 }
