@@ -2,24 +2,25 @@ package app.supernaut.fx.sample.maven;
 
 import app.supernaut.fx.FxForegroundApp;
 import app.supernaut.fx.FxLauncher;
-import app.supernaut.services.BrowserService;
+import app.supernaut.fx.sample.maven.demo.DataObject;
+import app.supernaut.fx.sample.maven.demo.SystemInfo;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import javax.inject.Singleton;
-import java.net.URI;
 
 @Singleton
 public class HelloFX implements FxForegroundApp.FxApplicationCompat {
-    private static final URI githubRepoUri = URI.create("https://github.com/SupernautApp/SupernautFX");
-    private final BrowserService browserService;
 
-    public HelloFX(BrowserService browserService) {
-        this.browserService = browserService;
+    private final DataObject dataObject;
+    private final SystemInfo systemInfo;
+
+    public HelloFX(DataObject dataObject, SystemInfo systemInfo) {
+        this.dataObject = dataObject;
+        this.systemInfo = systemInfo;
     }
 
     @Override
@@ -30,14 +31,25 @@ public class HelloFX implements FxForegroundApp.FxApplicationCompat {
     }
 
     private Scene buildScene() {
-        var javaVersion = System.getProperty("java.version");
-        var javafxVersion = System.getProperty("javafx.version");
-        var label       = new Label("Hello, JavaFX " + javafxVersion + ", running on Java " + javaVersion + ".");
-        //var hyperlink   = new Hyperlink("Powered by Supernaut.FX");  // Doesn't work in Graal native-image yet
-        var vbox        = new VBox(label /*, hyperlink */);
+        var lblJavaVersion = new Label();
+        lblJavaVersion.textProperty().bind(dataObject.javaVersion);
+        var lblJavaFxVersion = new Label();
+        lblJavaFxVersion.textProperty().bind(dataObject.javaFxVersion);
+        var lblCounter = new Label();
+        lblCounter.textProperty().bind(dataObject.counter.asString());
+
+        var vbox = new VBox(
+                new Label("Hello World!"),
+                new Label("Running on Java:"),
+                lblJavaVersion,
+                new Label("With JavaFX:"),
+                lblJavaFxVersion,
+                new Label("Counter:"),
+                lblCounter
+        );
         vbox.setAlignment(Pos.CENTER);
-        //hyperlink.setOnAction(e -> browserService.showDocument(githubRepoUri));
-        return new Scene(vbox, 350, 100);
+
+        return new Scene(vbox, 350, 400);
     }
 
     public static void main(String[] args) {
