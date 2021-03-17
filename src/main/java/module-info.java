@@ -7,7 +7,7 @@ module hellofx {
 
     requires app.supernaut.fx;
     requires app.supernaut.fx.micronaut;  // Needed (for now) on Maven toolchain but shouldn't be
-    requires javax.inject;
+    requires jakarta.inject;
 
     requires io.micronaut.inject;   // Needed for Micronaut-generated classes,
     requires io.micronaut.core;     // This is needed by our Maven toolchain, but not by Gradle
