@@ -11,9 +11,9 @@
   <properties>
     <main.class>app.supernaut.fx.sample.maven.HelloFX</main.class>
     <maven.compiler.release>11</maven.compiler.release>
-    <javafx.version>16-ea+7</javafx.version>
-    <micronaut.version>2.3.2</micronaut.version>
-    <supernaut.version>0.1.1</supernaut.version>
+    <javafx.version>16</javafx.version>
+    <micronaut.version>2.4.0</micronaut.version>
+    <supernaut.version>0.1.2</supernaut.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.maven.plugin.version>0.0.5</javafx.maven.plugin.version>
     <client.maven.plugin.version>0.1.36</client.maven.plugin.version>
