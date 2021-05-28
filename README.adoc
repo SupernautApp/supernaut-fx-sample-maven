@@ -2,10 +2,8 @@
 
 == Setup
 
-. Install JDK 11 or later. (JDK 15 or 16 is recommended)
+. Install JDK 11 or later. (JDK 16 is recommended)
 . Install Maven. (Maven 3.6 or later is recommended)
-
-NOTE:: Until Supernaut.FX v0.1.1 is released, you'll have to build Supernaut locally and install into your local Maven Repo.
 
 == Build Instructions
 
@@ -20,7 +18,7 @@ or, to run the app:
 
 == Graal VM Setup
 
-. Install Graal VM 21.0.0.r11 (Latest GraalVM JDK 11)
+. Install Graal VM 21.1.0.r11 (Latest GraalVM JDK 11)
 . `gu install native-image`
 . Set `GRAALVM_HOME` environment variable
 
