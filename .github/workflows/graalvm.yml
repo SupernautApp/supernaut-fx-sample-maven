@@ -1,4 +1,4 @@
-name: GraalVM Build
+name: Maven GraalVM + Gluon Build
 
 on: [push, pull_request]
 
