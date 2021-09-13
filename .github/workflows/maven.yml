@@ -1,4 +1,4 @@
-name: Gradle Build
+name: Maven JVM Build
 
 on: [push, pull_request]
 
