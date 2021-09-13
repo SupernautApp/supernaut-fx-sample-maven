@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macOS-latest]
+        # These parameters aren't currently used with gluonhq/setup-graalvm
         java: ['java11']
         graalvm: [ '21.2.0' ]
         gu-binary: [gu]
@@ -17,7 +18,7 @@ jobs:
             graalvm: '21.2.0'
             gu-binary: gu.cmd
       fail-fast: false
-    name: ${{ matrix.os }} GraalVM ${{ matrix.graalvm }}
+    name: ${{ matrix.os }} GraalVM + Gluon
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
@@ -39,5 +40,26 @@ jobs:
         if: runner.os == 'Windows'
         uses: egor-tensin/vs-shell@v1
 
-      - name: Build with Maven
-        run: mvn verify gluonfx:build
+      - name: Make staging directory
+        run: mkdir staging
+
+      - name: Build with Maven and Gluon Plugin
+        run: mvn -Pdesktop verify gluonfx:build gluonfx:package
+
+      - name: If macOS, copy Mac native image to staging
+        if: runner.os == 'macOS'
+        run: cp -r target/gluonfx/x86_64-darwin/HelloGluon* staging
+
+      - name: If Windows, copy Windows native image to staging
+        if: runner.os == 'Windows'
+        run: cp -r target/gluonfx/x86_64-windows/HelloGluon.exe staging
+
+      - name: If Linux, copy Linux native image to staging
+        if: runner.os == 'Linux'
+        run: cp -r target/gluonfx/x86_64-linux/HelloGluon** staging
+
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: staging
