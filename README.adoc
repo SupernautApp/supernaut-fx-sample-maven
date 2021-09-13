@@ -1,6 +1,6 @@
 = Supernaut.FX Sample Maven Project
 
-image:https://github.com/SupernautApp/supernaut-fx-sample-maven/workflows/Gradle%20Build/badge.svg["Build Status", link="https://github.com/SupernautApp/supernaut-fx-sample-maven/actions"] image:https://github.com/SupernautApp/supernaut-fx-sample-maven/workflows/GraalVM%20Build/badge.svg["Build Status", link="https://github.com/SupernautApp/supernaut-fx-sample-maven/actions"]
+image:https://github.com/SupernautApp/supernaut-fx-sample-maven/actions/workflows/maven.yml/badge.svg["Build Status", link="https://github.com/SupernautApp/supernaut-fx-sample-maven/actions/workflows/maven.yml"] image:https://github.com/SupernautApp/supernaut-fx-sample-maven/actions/workflows/graalvm.yml/badge.svg["Build Status", link="https://github.com/SupernautApp/supernaut-fx-sample-maven/actions/workflows/graalvm.yml"]
 
 == Overview
 
@@ -28,7 +28,7 @@ or, to run the app:
 
 == Graal VM Setup
 
-. Install Graal VM 21.1.0.r11 (Latest GraalVM JDK 11)
+. Install Graal VM 21.2.0.java11 (Latest GraalVM JDK 11)
 . `gu install native-image`
 . Set `GRAALVM_HOME` environment variable
 
