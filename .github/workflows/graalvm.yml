@@ -7,8 +7,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest, windows-latest]
-        graalvm: [ '21.2.0.java11' ]
+        os: [ubuntu-latest, macOS-latest]
+        java: ['java11']
+        graalvm: [ '21.2.0' ]
+        gu-binary: [gu]
+        include:
+          - os: windows-latest
+            java: 'java11'
+            graalvm: '21.2.0'
+            gu-binary: gu.cmd
       fail-fast: false
     name: ${{ matrix.os }} GraalVM ${{ matrix.graalvm }}
     steps:
@@ -18,10 +25,11 @@ jobs:
       - name: Set up GraalVM
         uses: DeLaGuardo/setup-graalvm@3.1
         with:
-          graalvm-version: ${{ matrix.graalvm }}
+          graalvm: ${{ matrix.graalvm }}
+          java: ${{ matrix.java }}
 
       - name: Install native-image plugin
-        run: gu install native-image
+        run: ${{ matrix.gu-binary }} install native-image
 
       - name: If Linux, install Linux dependencies
         if: runner.os == 'Linux'
