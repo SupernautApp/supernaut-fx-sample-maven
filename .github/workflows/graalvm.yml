@@ -21,4 +21,4 @@ jobs:
       - name: Install native-image plugin
         run: gu install native-image
       - name: Build with Maven
-        run: mvn verify client:build
+        run: mvn verify gluonfx:build
