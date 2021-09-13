@@ -7,21 +7,33 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         graalvm: [ '21.2.0.java11' ]
       fail-fast: false
     name: ${{ matrix.os }} GraalVM ${{ matrix.graalvm }}
     steps:
       - name: Git checkout
         uses: actions/checkout@v1
+
       - name: Set up GraalVM
         uses: DeLaGuardo/setup-graalvm@3.1
         with:
           graalvm-version: ${{ matrix.graalvm }}
+
       - name: Install native-image plugin
         run: gu install native-image
-      - name: If Linux, Install Linux dependencies
+
+      - name: If Linux, install Linux dependencies
         if: runner.os == 'Linux'
         run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
+
+      - name: If Windows, add msbuild to PATH
+        if: runner.os == 'Windows'
+        uses: microsoft/setup-msbuild@v1.0.2
+
+      - name: If Windows, Visual Studio shell
+        if: runner.os == 'Windows'
+        uses: egor-tensin/vs-shell@v1
+
       - name: Build with Maven
         run: mvn verify gluonfx:build
