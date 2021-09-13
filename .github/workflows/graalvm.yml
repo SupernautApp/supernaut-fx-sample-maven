@@ -24,6 +24,8 @@ jobs:
 
       - name: Setup Gluon's GraalVM
         uses: gluonhq/setup-graalvm@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: If Linux, install Linux dependencies
         if: runner.os == 'Linux'
