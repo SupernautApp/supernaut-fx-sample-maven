@@ -48,15 +48,15 @@ jobs:
 
       - name: If macOS, copy Mac native image to staging
         if: runner.os == 'macOS'
-        run: cp -r target/gluonfx/x86_64-darwin/HelloGluon* staging
+        run: cp -r target/gluonfx/x86_64-darwin/SupernautFXHello* staging
 
       - name: If Windows, copy Windows native image to staging
         if: runner.os == 'Windows'
-        run: cp -r target/gluonfx/x86_64-windows/HelloGluon.exe staging
+        run: cp -r target/gluonfx/x86_64-windows/SupernautFXHello.exe staging
 
       - name: If Linux, copy Linux native image to staging
         if: runner.os == 'Linux'
-        run: cp -r target/gluonfx/x86_64-linux/HelloGluon** staging
+        run: cp -r target/gluonfx/x86_64-linux/SupernautFXHello** staging
 
       - name: Upload
         uses: actions/upload-artifact@v2
