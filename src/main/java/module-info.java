@@ -1,5 +1,5 @@
 /**
- *
+ * Java Module definitions for HelloFX, the minimal SupernautFX Gradle Sample
  */
 module hellofx {
     requires javafx.graphics;
@@ -13,7 +13,6 @@ module hellofx {
     requires io.micronaut.core;     // This is needed by our Maven toolchain, but not by Gradle
 
     requires org.slf4j;
-    requires java.logging;
 
     opens app.supernaut.fx.sample.maven to javafx.graphics, java.base;
     exports app.supernaut.fx.sample.maven;

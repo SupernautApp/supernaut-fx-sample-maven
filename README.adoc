@@ -1,9 +1,19 @@
 = Supernaut.FX Sample Maven Project
 
+
+== Overview
+
+A sample/starter project that uses the Maven build system. It uses the https://github.com/openjfx/javafx-maven-plugin[JavaFX Plugin] to build and/or run a JavaFX JAR/app and the https://github.com/gluonhq/gluonfx-gradle-plugin[GluonFX Plugin] to build and run a GraalVM native-image.
+
+NOTE:: Building a native package with `jlink`/`jpackage` is not supported with Maven at this time. It is supported with Gradle, however. See the https://github.com/SupernautApp/supernaut-fx-sample-gradle[Supernaut.FX Sample Gradle Project] for an example.
+
+
 == Setup
 
-. Install JDK 11 or later. (JDK 16 is recommended)
+. Install JDK 11 or later. (JDK 17 is recommended)
 . Install Maven. (Maven 3.6 or later is recommended)
+
+If you are building a GraalVM native image with GluonFX you may need to install additional software (depending upon your platform) see the https://docs.gluonhq.com/[Gluon Documentation] for info.
 
 == Build Instructions
 
@@ -26,9 +36,9 @@ or, to run the app:
 
 To build:
 
-. `mvn client:build`
+. `mvn gluonfx:build`
 
 or, to run:
 
-. `mvn client:build client:run`
+. `mvn gluonfx:build gluonfx:run`
 
