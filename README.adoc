@@ -8,6 +8,10 @@ A sample/starter project that uses the Maven build system. It uses the https://g
 
 NOTE:: Building a native package with `jlink`/`jpackage` is not supported with Maven at this time. (See https://github.com/SupernautApp/supernaut-fx-sample-maven/issues/1[Issue #1].) It is supported with Gradle, however. See the https://github.com/SupernautApp/supernaut-fx-sample-gradle[Supernaut.FX Sample Gradle Project] for an example.
 
+== Cloning from Github
+
+. `git clone git@github.com:SupernautApp/supernaut-fx-sample-maven.git`
+. `cd supernaut-fx-sample-maven`
 
 == Building with the JDK
 
@@ -20,11 +24,11 @@ NOTE:: Building a native package with `jlink`/`jpackage` is not supported with M
 
 To compile and test:
 
-. `mvn verify`
+* `mvn verify`
 
 or, to run the app:
 
-. `mvn javafx:run`
+* `mvn javafx:run`
 
 
 == Building with GraalVM and Gluon
@@ -42,9 +46,9 @@ If you are building a GraalVM native image with GluonFX you may need to install 
 
 To build:
 
-. `mvn gluonfx:build`
+* `mvn gluonfx:build`
 
 or, to run:
 
-. `mvn gluonfx:build gluonfx:nativerun`
+* `mvn gluonfx:build gluonfx:nativerun`
 
