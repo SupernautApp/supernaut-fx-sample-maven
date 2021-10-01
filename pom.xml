@@ -16,7 +16,7 @@
     <supernaut.version>0.2.0</supernaut.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <javafx.maven.plugin.version>0.0.7</javafx.maven.plugin.version>
-    <gluonfx.maven.plugin.version>1.0.5</gluonfx.maven.plugin.version>
+    <gluonfx.maven.plugin.version>1.0.7</gluonfx.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
