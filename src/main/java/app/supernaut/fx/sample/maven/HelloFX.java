@@ -46,7 +46,7 @@ public class HelloFX implements FxForegroundApp.FxApplicationCompat {
         var vbox        = new VBox(vboxNodes);
         vbox.setAlignment(Pos.CENTER);
         hyperlink.setOnAction(e -> browserService.showDocument(projectWebSiteUri));
-        return new Scene(vbox, 350, 100);
+        return new Scene(vbox, 500, 100);
     }
 
     private String buildHello() {
