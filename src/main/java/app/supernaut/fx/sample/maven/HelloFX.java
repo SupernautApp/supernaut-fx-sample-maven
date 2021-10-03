@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
+import java.util.Locale;
 
 @Singleton
 public class HelloFX implements FxForegroundApp.FxApplicationCompat {
@@ -39,14 +40,26 @@ public class HelloFX implements FxForegroundApp.FxApplicationCompat {
     private Scene buildScene() {
         var label       = new Label(buildHello());
         var hyperlink   = new Hyperlink("Powered by Supernaut.FX");
-        // Hyperlinks don't work on macOS in Graal native-image yet, see https://github.com/SupernautApp/SupernautFX/issues/25
         // TODO: Add a test that will set the below boolean to true if JavaFX > forthcoming 18-ea+4
-        boolean addHyperlink = false;
+        // See WIP in Supernaut.FX main repo
+        boolean addHyperlink = isShowDocumentAvailable();
         var vboxNodes = addHyperlink ? new Node[]{label, hyperlink} : new Node[]{label};
         var vbox        = new VBox(vboxNodes);
         vbox.setAlignment(Pos.CENTER);
         hyperlink.setOnAction(e -> browserService.showDocument(projectWebSiteUri));
         return new Scene(vbox, 500, 100);
+    }
+
+    // We're working on a more proper version of this is the main Supernaut.FX repository.
+    // This will disable hyperlinks on macOS even on JVM when it only fails on GraalVM native-image
+    boolean isShowDocumentAvailable() {
+        return !isMacOS();
+    }
+
+    private boolean isMacOS() {
+        boolean isMacOS = System.getProperty("os.name", "").toLowerCase(Locale.US).contains("mac");
+        log.info("isMacOS: {}", isMacOS);
+        return isMacOS;
     }
 
     private String buildHello() {
