@@ -19,7 +19,7 @@ import java.net.URI;
 import java.util.Locale;
 
 @Singleton
-public class HelloFX implements FxForegroundApp.FxApplicationCompat {
+public class HelloFX implements FxForegroundApp {
     private static final Logger log = LoggerFactory.getLogger(HelloFX.class);
     private static final URI projectWebSiteUri = URI.create("https://www.supernaut.app");
     private final BrowserService browserService;
