@@ -66,6 +66,8 @@ public class HelloFX implements FxForegroundApp.FxApplicationCompat {
         var javaVersion = System.getProperty("java.version");
         var javafxVersion = System.getProperty("javafx.version");
         var javaFxRuntimeVersion = System.getProperty("javafx.runtime.version");
+        log.info("javafx.version: {}", javafxVersion);
+        log.info("javafx.runtime.version: {}", javaFxRuntimeVersion);
         return String.format("Hello, JavaFX  %s running on Java %s",
                 javaFxRuntimeVersion, javaVersion);
     }
