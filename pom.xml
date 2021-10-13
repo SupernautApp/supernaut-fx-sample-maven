@@ -70,12 +70,6 @@
       <artifactId>micronaut-inject</artifactId>
 	    <version>${micronaut.version}</version>
       <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>com.google.code.findbugs</groupId>
-          <artifactId>jsr305</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>jakarta.inject</groupId>
