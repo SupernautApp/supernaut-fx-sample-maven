@@ -12,7 +12,7 @@
     <main.class>app.supernaut.fx.sample.maven.HelloFX</main.class>
     <maven.compiler.release>11</maven.compiler.release>
     <javafx.version>17.0.0.1</javafx.version>
-    <micronaut.version>2.5.13</micronaut.version>
+    <micronaut.version>3.1.0</micronaut.version>
     <supernaut.version>0.2.1</supernaut.version>
     <slf4j.version>2.0.0-alpha5</slf4j.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -89,7 +89,7 @@
       <plugin>
         <groupId>io.micronaut.build</groupId>
         <artifactId>micronaut-maven-plugin</artifactId>
-        <version>1.1.5</version>
+        <version>3.0.2</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
