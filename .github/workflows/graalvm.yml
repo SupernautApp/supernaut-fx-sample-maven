@@ -28,6 +28,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: If Linux, apt-get update
+        if: runner.os == 'Linux'
+        run: sudo apt-get update
+
       - name: If Linux, install Linux dependencies
         if: runner.os == 'Linux'
         run: sudo apt install libasound2-dev libavcodec-dev libavformat-dev libavutil-dev libgl-dev libgtk-3-dev libpango1.0-dev libxtst-dev
