@@ -35,7 +35,7 @@ or, to run the app:
 
 === Setup
 
-. Install Graal VM 21.2.0.java11 (Latest GraalVM JDK 11)
+. Install Graal VM 21.3.0.java17 (Latest GraalVM JDK 17)
 . `gu install native-image`
 . Set `GRAALVM_HOME` environment variable
 . Install Maven. (Maven 3.6 or later is recommended)
