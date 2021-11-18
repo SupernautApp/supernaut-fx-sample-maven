@@ -9,7 +9,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macOS-latest]
         # These parameters aren't currently used with gluonhq/setup-graalvm
-        java: ['java11']
+        java: ['java17']
         graalvm: [ '21.3.0' ]
         gu-binary: [gu]
         include:
