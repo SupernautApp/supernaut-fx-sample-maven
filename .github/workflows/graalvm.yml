@@ -14,7 +14,7 @@ jobs:
         gu-binary: [gu]
         include:
           - os: windows-latest
-            java: 'java11'
+            java: 'java17'
             graalvm: '21.3.0'
             gu-binary: gu.cmd
       fail-fast: false
