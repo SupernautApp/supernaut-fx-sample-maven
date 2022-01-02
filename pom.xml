@@ -10,6 +10,7 @@
 
   <properties>
     <main.class>app.supernaut.fx.sample.maven.HelloFX</main.class>
+    <main.module>hellofx</main.module>
     <maven.compiler.release>11</maven.compiler.release>
     <javafx.version>17.0.1</javafx.version>
     <micronaut.version>3.1.4</micronaut.version>
@@ -21,10 +22,6 @@
   </properties>
 
   <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
     <repository>
       <id>gitlab-supernaut-maven</id>
       <url>https://gitlab.com/api/v4/projects/26584840/packages/maven</url>
@@ -54,29 +51,36 @@
     </dependency>
     <dependency>
       <groupId>app.supernaut</groupId>
-	    <artifactId>app.supernaut.fx</artifactId>
-	    <version>${supernaut.version}</version>
-	    <type>jar</type>
+      <artifactId>app.supernaut.fx</artifactId>
+      <version>${supernaut.version}</version>
     </dependency>
     <dependency>
       <groupId>app.supernaut</groupId>
-	    <artifactId>app.supernaut.fx.micronaut</artifactId>
-	    <version>${supernaut.version}</version>
-	    <type>jar</type>
+      <artifactId>app.supernaut.fx.micronaut</artifactId>
+      <version>${supernaut.version}</version>
     </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-inject</artifactId>
-	    <version>${micronaut.version}</version>
-      <scope>compile</scope>
+      <version>${micronaut.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions> 
     </dependency>
     <dependency>
       <groupId>jakarta.inject</groupId>
       <artifactId>jakarta.inject-api</artifactId>
       <version>2.0.1</version>
     </dependency>
-
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -105,12 +109,22 @@
           </compilerArgs>
         </configuration>
       </plugin>
+      <!-- create project's jar file in the target/modules folder
+           (to be used in the jlink image creation later) -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.0</version>
+        <configuration>
+          <outputDirectory>${project.build.directory}/modules</outputDirectory>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>${javafx.maven.plugin.version}</version>
         <configuration>
-          <mainClass>hellofx/app.supernaut.fx.sample.maven.HelloFX</mainClass>
+          <mainClass>${main.module}/${main.class}</mainClass>
           <!--
           <runtimePathOption>MODULEPATH</runtimePathOption>
           <options>
@@ -134,8 +148,194 @@
           <javafxStaticSdkVersion>18-ea+4</javafxStaticSdkVersion> <!-- 18-ea+4 fixes showDocument on macOS -->
         </configuration>
       </plugin>
+      <!-- following plugins are used, at package phase, to produce a jlink image for the project:
+           Step 1: copy all dependencies to target/modules folder -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/modules</outputDirectory>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+              <excludeTransitive>false</excludeTransitive>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- Step 2: generate the jlink image for the hellofx application -->
+      <plugin>
+        <groupId>org.moditect</groupId>
+        <artifactId>moditect-maven-plugin</artifactId>
+        <version>1.0.0.RC2</version>
+        <executions>
+          <!-- Step 2a: first, modularize the non-modular micronaut libraries -->
+          <execution>
+            <id>add-module-infos</id>
+            <phase>package</phase>
+            <goals>
+              <goal>add-module-info</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${project.build.directory}/modules</outputDirectory>
+              <overwriteExistingFiles>true</overwriteExistingFiles>
+              <modules>
+                <!-- modularize the micronaut-inject library -->
+                <module>
+                  <artifact>
+                    <groupId>io.micronaut</groupId>
+                    <artifactId>micronaut-inject</artifactId>
+                    <version>${micronaut.version}</version>
+                  </artifact>
+                  <moduleInfoSource>
+open module io.micronaut.inject {
+    requires io.micronaut.core;
+    requires transitive jakarta.annotation;
+    requires transitive jakarta.inject;
+    requires transitive org.slf4j;
+    provides io.micronaut.context.env.PropertySourceLoader with
+        io.micronaut.context.env.yaml.YamlPropertySourceLoader,
+        io.micronaut.context.env.PropertiesPropertySourceLoader;
+    provides io.micronaut.core.type.TypeInformationProvider with
+        io.micronaut.inject.provider.ProviderTypeInformationProvider;
+    provides io.micronaut.inject.BeanDefinitionReference with
+        io.micronaut.inject.provider.JavaxProviderBeanDefinition,
+        io.micronaut.inject.provider.BeanProviderDefinition,
+        io.micronaut.inject.provider.JakartaProviderBeanDefinition,
+        io.micronaut.context.event.ApplicationEventPublisherFactory;
+    provides io.micronaut.inject.annotation.AnnotationMapper with
+        io.micronaut.inject.annotation.internal.PersistenceContextAnnotationMapper,
+        io.micronaut.inject.annotation.internal.TimedAnnotationMapper,
+        io.micronaut.inject.beans.visitor.EntityIntrospectedAnnotationMapper,
+        io.micronaut.inject.beans.visitor.EntityReflectiveAccessAnnotationMapper,
+        io.micronaut.inject.beans.visitor.MappedSuperClassIntrospectionMapper,
+        io.micronaut.inject.beans.visitor.JsonCreatorAnnotationMapper;
+    provides io.micronaut.inject.annotation.AnnotationRemapper with
+        io.micronaut.inject.annotation.internal.FindBugsRemapper,
+        io.micronaut.inject.annotation.internal.JakartaRemapper;
+    provides io.micronaut.inject.annotation.AnnotationTransformer with
+        io.micronaut.inject.annotation.internal.CoreNullableTransformer,
+        io.micronaut.inject.annotation.internal.CoreNonNullTransformer,
+        io.micronaut.inject.annotation.internal.KotlinNullableMapper,
+        io.micronaut.inject.annotation.internal.KotlinNotNullMapper,
+        io.micronaut.inject.annotation.internal.JakartaPostConstructTransformer,
+        io.micronaut.inject.annotation.internal.JakartaPreDestroyTransformer;
+    provides io.micronaut.inject.configuration.ConfigurationMetadataWriter with
+        io.micronaut.inject.configuration.JsonConfigurationMetadataWriter;
+    provides io.micronaut.inject.visitor.TypeElementVisitor with
+        io.micronaut.inject.beans.visitor.IntrospectedTypeElementVisitor,
+        io.micronaut.context.visitor.BeanImportVisitor;
+}
+                  </moduleInfoSource>
+                </module>
+                <!-- modularize the micronaut-core library -->
+                <module>
+                  <artifact>
+                    <groupId>io.micronaut</groupId>
+                    <artifactId>micronaut-core</artifactId>
+                    <version>${micronaut.version}</version>
+                  </artifact>
+                  <moduleInfoSource>
+module io.micronaut.core {
+    requires jakarta.annotation;
+    requires jakarta.inject;
+    requires java.logging;
+    requires org.slf4j;
+    requires transitive jdk.unsupported;
+    exports io.micronaut.asm;
+    exports io.micronaut.asm.commons;
+    exports io.micronaut.asm.signature;
+    exports io.micronaut.asm.tree;
+    exports io.micronaut.asm.tree.analysis;
+    exports io.micronaut.caffeine;
+    exports io.micronaut.caffeine.base;
+    exports io.micronaut.caffeine.cache;
+    exports io.micronaut.caffeine.cache.stats;
+    exports io.micronaut.core.annotation;
+    exports io.micronaut.core.attr;
+    exports io.micronaut.core.beans;
+    exports io.micronaut.core.beans.exceptions;
+    exports io.micronaut.core.bind;
+    exports io.micronaut.core.bind.annotation;
+    exports io.micronaut.core.bind.exceptions;
+    exports io.micronaut.core.cli;
+    exports io.micronaut.core.cli.exceptions;
+    exports io.micronaut.core.convert;
+    exports io.micronaut.core.convert.converters;
+    exports io.micronaut.core.convert.exceptions;
+    exports io.micronaut.core.convert.format;
+    exports io.micronaut.core.convert.value;
+    exports io.micronaut.core.exceptions;
+    exports io.micronaut.core.graal;
+    exports io.micronaut.core.io;
+    exports io.micronaut.core.io.buffer;
+    exports io.micronaut.core.io.file;
+    exports io.micronaut.core.io.scan;
+    exports io.micronaut.core.io.service;
+    exports io.micronaut.core.io.socket;
+    exports io.micronaut.core.naming;
+    exports io.micronaut.core.naming.conventions;
+    exports io.micronaut.core.order;
+    exports io.micronaut.core.reflect;
+    exports io.micronaut.core.reflect.exception;
+    exports io.micronaut.core.serialize;
+    exports io.micronaut.core.serialize.exceptions;
+    exports io.micronaut.core.type;
+    exports io.micronaut.core.util;
+    exports io.micronaut.core.util.clhm;
+    exports io.micronaut.core.util.functional;
+    exports io.micronaut.core.util.locale;
+    exports io.micronaut.core.value;
+    exports io.micronaut.core.version;
+    exports io.micronaut.core.version.annotation;
+}
+                  </moduleInfoSource>
+                </module>
+              </modules>
+            </configuration>
+          </execution>
+          <!-- Step 2b: secondly, generate the jlink image from the target/modules folder -->
+          <execution>
+            <id>create-runtime-image</id>
+            <phase>package</phase>
+            <goals>
+              <goal>create-runtime-image</goal>
+            </goals>
+            <configuration>
+              <modulePath>
+                <path>${project.build.directory}/modules</path>
+              </modulePath>
+              <modules>
+                <!-- main application module (and implicitly including dependent modules) -->
+                <module>${main.module}</module>
+                <!-- extra modules required at runtime -->
+                <module>app.supernaut.fx.micronaut</module>
+                <module>org.slf4j.jul</module>
+              </modules>
+              <stripDebug>true</stripDebug>
+              <noManPages>true</noManPages>
+              <noHeaderFiles>true</noHeaderFiles>
+              <compression>2</compression>
+              <jarInclusionPolicy>NONE</jarInclusionPolicy>
+              <launcher>
+                <name>${main.module}</name>
+                <module>${main.module}/${main.class}</module>
+              </launcher>
+              <outputDirectory>${project.build.directory}/image</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>desktop</id>
