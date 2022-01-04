@@ -10,6 +10,7 @@
 
   <properties>
     <main.class>app.supernaut.fx.sample.maven.HelloFX</main.class>
+    <main.module>hellofx</main.module>
     <maven.compiler.release>11</maven.compiler.release>
     <javafx.version>17.0.1</javafx.version>
     <micronaut.version>3.1.4</micronaut.version>
@@ -17,14 +18,11 @@
     <slf4j.version>2.0.0-alpha5</slf4j.version>
     <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     <gluonfx.maven.plugin.version>1.0.9</gluonfx.maven.plugin.version>
+    <tentackle.maven.plugin.version>17.9.0.0</tentackle.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <repositories>
-    <repository>
-      <id>central</id>
-      <url>https://repo.maven.apache.org/maven2</url>
-    </repository>
     <repository>
       <id>gitlab-supernaut-maven</id>
       <url>https://gitlab.com/api/v4/projects/26584840/packages/maven</url>
@@ -54,29 +52,36 @@
     </dependency>
     <dependency>
       <groupId>app.supernaut</groupId>
-	    <artifactId>app.supernaut.fx</artifactId>
-	    <version>${supernaut.version}</version>
-	    <type>jar</type>
+      <artifactId>app.supernaut.fx</artifactId>
+      <version>${supernaut.version}</version>
     </dependency>
     <dependency>
       <groupId>app.supernaut</groupId>
-	    <artifactId>app.supernaut.fx.micronaut</artifactId>
-	    <version>${supernaut.version}</version>
-	    <type>jar</type>
+      <artifactId>app.supernaut.fx.micronaut</artifactId>
+      <version>${supernaut.version}</version>
     </dependency>
     <dependency>
       <groupId>io.micronaut</groupId>
       <artifactId>micronaut-inject</artifactId>
-	    <version>${micronaut.version}</version>
-      <scope>compile</scope>
+      <version>${micronaut.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.annotation</groupId>
+          <artifactId>javax.annotation-api</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.yaml</groupId>
+          <artifactId>snakeyaml</artifactId>
+        </exclusion>
+      </exclusions> 
     </dependency>
     <dependency>
       <groupId>jakarta.inject</groupId>
       <artifactId>jakarta.inject-api</artifactId>
       <version>2.0.1</version>
     </dependency>
-
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -110,7 +115,7 @@
         <artifactId>javafx-maven-plugin</artifactId>
         <version>${javafx.maven.plugin.version}</version>
         <configuration>
-          <mainClass>hellofx/app.supernaut.fx.sample.maven.HelloFX</mainClass>
+          <mainClass>${main.module}/${main.class}</mainClass>
           <!--
           <runtimePathOption>MODULEPATH</runtimePathOption>
           <options>
@@ -134,8 +139,32 @@
           <javafxStaticSdkVersion>18-ea+4</javafxStaticSdkVersion> <!-- 18-ea+4 fixes showDocument on macOS -->
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.tentackle</groupId>
+        <artifactId>tentackle-jlink-maven-plugin</artifactId>
+        <version>${tentackle.maven.plugin.version}</version>
+        <extensions>true</extensions>
+        <configuration>
+          <mainClass>${main.class}</mainClass>
+          <stripDebug>true</stripDebug>
+          <noManPages>true</noManPages>
+          <noHeaderFiles>true</noHeaderFiles>
+          <compression>2</compression>
+          <templateDir>${project.build.directory}/templates</templateDir>
+        </configuration>
+        <executions>
+          <execution>
+            <id>create-both-packages</id>
+            <goals>
+              <goal>jlink</goal>
+              <goal>jpackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
   <profiles>
     <profile>
       <id>desktop</id>
