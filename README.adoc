@@ -55,3 +55,9 @@ or, to run:
 
 * `mvn gluonfx:build gluonfx:nativerun`
 
+or, to build a packaged application:
+
+* `mvn -Pdesktop gluonfx:build gluonfx:package`
+
+The packaged application will be in `target/gluonfx/<platform>/`
+
