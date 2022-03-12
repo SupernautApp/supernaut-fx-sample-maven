@@ -18,7 +18,7 @@ NOTE:: Building a native package with `jpackage` is not yet supported with Maven
 === Setup
 
 . Install JDK 11 or later. (JDK 17 is recommended)
-. Install Maven. (Maven 3.6 or later is recommended)
+. Install Maven. (Maven 3.8.1 or later is recommended)
 
 === Build Instructions
 
@@ -38,10 +38,10 @@ To run the `jlink`ed app:
 
 === Setup
 
-. Install Graal VM 21.3.0.java17 (Latest GraalVM JDK 17)
+. Install Graal VM `java17` version 22.0.0.2 or later(Latest GraalVM JDK 17)
 . `gu install native-image`
 . Set `GRAALVM_HOME` environment variable
-. Install Maven. (Maven 3.6 or later is recommended)
+. Install Maven. (Maven 3.8.1 or later is recommended)
 
 If you are building a GraalVM native image with GluonFX you may need to install additional software (depending upon your platform) see the https://docs.gluonhq.com/[Gluon Documentation] for info.
 
