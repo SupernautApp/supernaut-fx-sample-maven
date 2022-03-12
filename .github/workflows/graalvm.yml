@@ -10,12 +10,12 @@ jobs:
         os: [ubuntu-latest, macOS-latest]
         # These parameters aren't currently used with gluonhq/setup-graalvm
         java: ['java17']
-        graalvm: [ '21.3.0' ]
+        graalvm: [ '22.0.0.2' ]
         gu-binary: [gu]
         include:
           - os: windows-latest
             java: 'java17'
-            graalvm: '21.3.0'
+            graalvm: '22.0.0.2'
             gu-binary: gu.cmd
       fail-fast: false
     name: ${{ matrix.os }} GraalVM + Gluon
