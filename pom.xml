@@ -145,7 +145,6 @@
         <configuration>
           <target>${gluonfx.target}</target>
           <mainClass>${main.class}</mainClass>
-          <javafxStaticSdkVersion>18-ea+10</javafxStaticSdkVersion> <!-- 18-ea+4 fixes showDocument on macOS -->
           <releaseConfiguration>
               <macAppStore>false</macAppStore>
               <skipSigning>true</skipSigning>
