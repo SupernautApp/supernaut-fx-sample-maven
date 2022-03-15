@@ -38,7 +38,7 @@ To run the `jlink`ed app:
 
 === Setup
 
-. Install Graal VM `java17` version 22.0.0.2 or later(Latest GraalVM JDK 17)
+. Install Graal VM `java17` version 22.0.0.2 or later (Latest GraalVM JDK 17)
 . `gu install native-image`
 . Set `GRAALVM_HOME` environment variable
 . Install Maven. (Maven 3.8.1 or later is recommended)
