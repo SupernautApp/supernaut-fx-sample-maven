@@ -13,9 +13,9 @@
     <main.module>hellofx</main.module>
     <maven.compiler.release>11</maven.compiler.release>
     <javafx.version>18</javafx.version>
-    <micronaut.version>3.4.0</micronaut.version>
+    <micronaut.version>3.4.1</micronaut.version>
     <supernaut.version>0.4.0</supernaut.version>
-    <slf4j.version>2.0.0-alpha6</slf4j.version>
+    <slf4j.version>2.0.0-alpha7</slf4j.version>
     <javafx.maven.plugin.version>0.0.8</javafx.maven.plugin.version>
     <gluonfx.maven.plugin.version>1.0.12</gluonfx.maven.plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
